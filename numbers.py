@@ -1,3 +1,6 @@
+from exceptions import BigNumberError, InvalidNumberTypeError
+
+
 class NumberToString:
     """
         Transform numbers to english spelling words.
@@ -156,14 +159,14 @@ class NumberToString:
         elif isinstance(number, float):
             func_ = self._float_to_str
         else:
-            raise Exception("Invalid number type.")
+            raise InvalidNumberTypeError("Invalid number type.")
 
         negative = False
         if number < 0:
             negative, number = True, abs(number)
 
         if number >= self.NUMBERS_MAPPINGS[self.SEXTILLION]:
-            raise Exception("Max number %d is allowed." % (self.NUMBERS_MAPPINGS[self.SEXTILLION] - 1))
+            raise BigNumberError("Max number %d is allowed." % (self.NUMBERS_MAPPINGS[self.SEXTILLION] - 1))
 
         num_str = func_(number)
         return "negative %s" % num_str if negative else num_str
@@ -182,4 +185,3 @@ if __name__ == '__main__':
     assert NumberToString().transform(1.1245) == "one and one thousand, two hundred forty-five ten thousandths"
     assert NumberToString().transform(63.45) == "sixty-three and forty-five hundredths"
     assert NumberToString().transform(123.0004500) == "one hundred twenty-three and forty-five hundred thousandths"
-    print(NumberToString().transform(999999999999999999999.999999999999999999999))
